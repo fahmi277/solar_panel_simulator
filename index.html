@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Solar Panel Simulator</title>
+  </head>
+  <body>
+    <h1>Solar Panel Simulator</h1>
+    <p id="currentTime">Current Time: <span id="timeValue">00:00:00</span></p>
+    <p id="sunIntensity">Sun Intensity: <span id="sunIntensityValue">0</span> %</p>
+    <p id="powerOutput">Power Output: <span id="powerOutputValue">0</span> W</p>
+    <p id="voltage">Voltage: <span id="voltageValue">0</span> V</p>
+    <p id="current">Current: <span id="currentValue">0</span> A</p>
+    <p id="energyOutput">Energy: <span id="energyOutputValue">0</span> KWH</p>
+
+    <script>
+      // Constants
+      // Constants
+const SECONDS_PER_HOUR = 3600; // Number of seconds in an hour
+
+// Variables
+let energyOutput = 0; // Energy output of the solar panel in kilowatt-hours
+
+      const MAX_POWER = 1000; // Maximum power output of the solar panel in watts
+      const MAX_VOLTAGE = 150; // Maximum voltage output of the solar panel in volts
+      const MAX_CURRENT = 10; // Maximum current output of the solar panel in amperes
+
+      // Variables
+      let sunIntensity = 0; // Intensity of sunlight (0-100)
+      let powerOutput = 0; // Power output of the solar panel in watts
+      let voltage = 0; // Voltage output of the solar panel in volts
+      let current = 0; // Current output of the solar panel in amperes
+
+      // Function to format time as HH:MM:SS
+      function formatTime(date) {
+        const hours = String(date.getHours()).padStart(2, "0");
+        const minutes = String(date.getMinutes()).padStart(2, "0");
+        const seconds = String(date.getSeconds()).padStart(2, "0");
+        return `${hours}:${minutes}:${seconds}`;
+      }
+
+      // Function to update the power output, voltage, and current based on the current time
+      function updateOutputs() {
+        const currentTime = new Date();
+        const hour = currentTime.getHours();
+
+        if (hour >= 0 && hour < 6) {
+          sunIntensity = 0;
+        } else if (hour >= 6 && hour < 10) {
+          sunIntensity = Math.floor(Math.random() * 41) + 10;
+        } else if (hour >= 10 && hour < 14) {
+          sunIntensity = Math.floor(Math.random() * 51) + 40;
+        } else if (hour >= 14 && hour < 16) {
+          sunIntensity = Math.floor(Math.random() * 31) + 20;
+        } else {
+          sunIntensity = 0;
+        }
+
+        powerOutput = (sunIntensity / 100) * MAX_POWER;
+        voltage = (powerOutput / MAX_POWER) * MAX_VOLTAGE;
+        current = (powerOutput / MAX_POWER) * MAX_CURRENT;
+        energyOutput += (powerOutput / MAX_POWER) * (SECONDS_PER_HOUR / 1000);
+
+        document.getElementById("timeValue").textContent = formatTime(currentTime);
+        document.getElementById("sunIntensityValue").textContent = sunIntensity;
+        document.getElementById("powerOutputValue").textContent = powerOutput.toFixed(2);
+        document.getElementById("voltageValue").textContent = voltage.toFixed(2);
+        document.getElementById("currentValue").textContent = current.toFixed(2);
+         document.getElementById("energyOutputValue").textContent = current.toFixed(0);
+      }
+
+      // Update outputs immediately
+      updateOutputs();
+
+      // Simulate sun intensity every second
+      setInterval(updateOutputs, 1000);
+    </script>
+  </body>
+</html>
